@@ -2,8 +2,9 @@ import React from 'react';
 import fetchData from './api';
 import Grid from './Grid';
 import { string } from 'prop-types';
-import   {MyContext}  from './App';
-interface ISearch {
+import   {MyContext, SecContext}  from './App';
+import SearchBox from './SearchBox';
+export interface ISearch {
     getGif: (e, query) => void
 }
 const Search = (props: ISearch) => {
@@ -21,9 +22,10 @@ const Search = (props: ISearch) => {
 
     return (
         <div>
-
-            <input id='inp'placeholder='search gifs' onChange={()=>console.log('nabral')}></input>
-            <button onClick={(e) => props.getGif(e,(document.getElementById('inp')as HTMLInputElement).value)}>Search</button> 
+            <SecContext.Consumer>{(getGif)=> 
+                <SearchBox getGif={getGif}/>
+                }
+            </SecContext.Consumer>
             <MyContext.Consumer>{(store) => {
                 console.log(store);
                 return (

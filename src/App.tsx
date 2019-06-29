@@ -8,10 +8,11 @@ import About from './About';
 import fetchData from './api';
 
 export const MyContext=React.createContext(null);
+export const SecContext=React.createContext(null);
 class App extends React.Component {
   state={
     store: [/*{id: 'test', url: 'https://media2.giphy.com/media/cLcxtL1z8t8oo/giphy.gif?cid=043a88795d1645207638794d45e54297&rid=giphy.gif'}*/]
-  }
+    }
   
   // getData = async () =>{
   //   const data = await fetchData('cats');
@@ -36,7 +37,9 @@ class App extends React.Component {
         <MyContext.Provider value={this.state.store}>
         <div className="App">
           <Nav/>
-          <Route path='/search' /*component={Search}*/ render={()=>(<Search getGif={this.getData}/>)}/>
+          <SecContext.Provider value={this.getData}>
+            <Route path='/search' component={Search} /*render={()=>(<Search getGif={this.getData}/>)}*/ />
+          </SecContext.Provider>
           <Route path='/saved' component={Saved}/>
           <Route path='/about' component={About}/>
         </div>
