@@ -4,7 +4,7 @@ import Grid from './Grid';
 import GifItem from './GifItem';
 
 const About = () => {
-    const a= fetchData('dogs');
+    const a= fetchData('dogs','stickers');
     console.log(a);
     let dan=a.then(item=> {console.log('item.data')
     return item.data});

@@ -6,18 +6,18 @@ const Saved = () =>{
     let saved = JSON.parse((localStorage.getItem("GIFS")! || "[]"));
     console.log(saved);
     let savedstate=[];
-    let prepq='';
-    saved.map(item => prepq=prepq+item+',');
-    prepq=prepq.slice(0,-1);
-    console.log(prepq);
+    // let prepq='';
+    // saved.map(item => prepq=prepq+item+',');
+    // prepq=prepq.slice(0,-1);
+    // console.log(prepq);
     // async function getSaved (query:string)  {
     //     const data = await fetchByIDs(query);
     //     data.map(item=> savedstate.push(item));
     // }
     // getSaved(prepq);
-
     saved.map(async item =>{
-        const data = await fetchByID(item);
+        
+        const data = await fetchByID(item.id,item.type);
         savedstate.push( {id: data.data.id, url: data.data.images.original.url});
     })
     console.log(savedstate);

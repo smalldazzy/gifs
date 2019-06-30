@@ -23,19 +23,24 @@ class App extends React.Component {
 
   // }
    getData = async (e,query) => {
-     e.preventDefault();
-    const data = await fetchData(query);
+     let inp = document.getElementById('cgif') as HTMLInputElement;
+     console.log(inp.checked);
+     let type='gifs';
+     if (!inp.checked) {type='stickers'}
+    //  e.preventDefault();
+    const data = await fetchData(query,type);
     this.setState({store:[]});
     console.log('zapisivau');
     console.log(this.state);
     data.data.map(element => {
         this.state.store.push({ id: element.id, url: element.images.original.url, saved:false })
     })
+    this.forceUpdate(); //иначе нет сетки с выдачей, хотя данные в компонентах есть
     
   }
   saveItem(id: string){
     let saved=JSON.parse((localStorage.getItem("GIFS")! || "[]"));
-    saved.push(id);
+    saved.push({id: id, type: 'gifs'});
     localStorage.setItem("GIFS", JSON.stringify(saved));
   }
   componentDidUpdate(){
