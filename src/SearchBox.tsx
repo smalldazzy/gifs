@@ -1,5 +1,6 @@
 import React from 'react';
 import { ISearch } from './Search';
+import { Redirect } from 'react-router-dom';
 
 const SearchBox = (props: ISearch) => {
     return (<div id='searchbox'>

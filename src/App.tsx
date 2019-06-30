@@ -23,15 +23,27 @@ class App extends React.Component {
 
   // }
    getData = async (e,query) => {
+     e.preventDefault();
     const data = await fetchData(query);
     this.setState({store:[]});
-    console.log(data.data);
+    console.log('zapisivau');
+    console.log(this.state);
     data.data.map(element => {
-        this.state.store.push({ id: element.id, url: element.images.original.url })
+        this.state.store.push({ id: element.id, url: element.images.original.url, saved:false })
     })
+    
+  }
+  saveItem(id: string){
+    let saved=JSON.parse((localStorage.getItem("GIFS")! || "[]"));
+    saved.push(id);
+    localStorage.setItem("GIFS", JSON.stringify(saved));
+  }
+  componentDidUpdate(){
+    console.log('updated');
   }
   render() {
     console.log('render');
+    // this.saveItem('F0HQQ0p3Mp8QM');
     return (
       <Router>
         <MyContext.Provider value={this.state.store}>

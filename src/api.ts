@@ -5,4 +5,13 @@ const fetchData = async (query: string) => {
     const response=await fetch(`http://api.giphy.com/v1/gifs/search?q=${query}&api_key=${API_KEY}&limit=5`);
     return response.json();
   }
-  export default fetchData;
+export const fetchByIDs = async (query: string) => {
+  const response = await fetch(`http://api.giphy.com/v1/gifs/ids=${query}&api_key=${API_KEY}`);
+  return response.json();
+
+}
+export const fetchByID = async (query: string) => {
+  const response = await fetch(`http://api.giphy.com/v1/gifs/${query}?api_key=${API_KEY}`);
+  return response.json();
+}
+export default fetchData;

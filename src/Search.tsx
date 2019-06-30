@@ -1,7 +1,5 @@
-import React from 'react';
-import fetchData from './api';
+import React, { useContext, useEffect, useState } from 'react';
 import Grid from './Grid';
-import { string } from 'prop-types';
 import   {MyContext, SecContext}  from './App';
 import SearchBox from './SearchBox';
 export interface ISearch {
@@ -19,21 +17,25 @@ const Search = (props: ISearch) => {
     // }
     // console.log(state);
     // console.log('sd');
-
+    let val = useContext(MyContext);
+    let getGif = useContext(SecContext);
+    console.log(val);
     return (
         <div>
-            <SecContext.Consumer>{(getGif)=> 
+            {/* <SecContext.Consumer>{(getGif)=> 
                 <SearchBox getGif={getGif}/>
                 }
-            </SecContext.Consumer>
-            <MyContext.Consumer>{(store) => {
+            </SecContext.Consumer> */}
+            <SearchBox getGif={getGif}/>
+            {/* <MyContext.Consumer>{(store) => {
                 console.log(store);
                 return (
                     <Grid gifs={store} />
                 )
             }
             }
-            </MyContext.Consumer>
+            </MyContext.Consumer> */}
+            {<Grid gifs={val}/>}
         </div>
     )
 }
