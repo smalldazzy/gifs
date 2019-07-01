@@ -1,25 +1,25 @@
-import React from 'react';
-import GifItem, { IGif } from './GifItem';
-
-
+import React, { useContext } from 'react';
+import GifItem from './GifItem';
+import { FourthContext } from './App';
 
 interface IGrid {
   gifs: Array<any>
 }
 const Grid = (props: IGrid) => {
-  console.log(props.gifs);
-    return(
-        <div className='grid-container'
+  let saveHandler = useContext(FourthContext);
+  return (
+    <div className='grid-container'
       style={{
-        display: 'grid',        
-    }}
+        display: 'grid',
+      }}
     >
-    {props.gifs.map(item=> { console.log(item);
-    return (<GifItem key={item.id} id={item.id} url={item.url} />)})
-    }
-        
+      {props.gifs.map(item => {
+        return (<GifItem key={item.id} id={item.id} url={item.url} saveHandler={saveHandler}/>)
+      })
+      }
+
 
     </div>
-    )
+  )
 }
 export default Grid;
