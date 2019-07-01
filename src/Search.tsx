@@ -1,10 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Grid from './Grid';
-import   {MyContext, SecContext}  from './App';
+import React, { useContext, useEffect, useState, Suspense } from 'react';
+import   {MyContext, SecContext, ThirdContext}  from './App';
 import SearchBox from './SearchBox';
+const Grid = React.lazy(()=> import ('./Grid'));
+
 export interface ISearch {
-    getGif: (e, query) => void
+    getGif: (query) => void
 }
+const Loading = () => <div>Loading...</div>
+
 const Search = (props: ISearch) => {
     // console.log(fetchData('dog'));
     // let state = [{ id: string, url: string }];
@@ -19,6 +22,7 @@ const Search = (props: ISearch) => {
     // console.log('sd');
     let val = useContext(MyContext);
     let getGif = useContext(SecContext);
+    let qur = useContext(ThirdContext);
     console.log(val);
     return (
         <div>
@@ -26,7 +30,7 @@ const Search = (props: ISearch) => {
                 <SearchBox getGif={getGif}/>
                 }
             </SecContext.Consumer> */}
-            <SearchBox getGif={getGif}/>
+            <SearchBox getGif={getGif} searchHandler={qur}/>
             {/* <MyContext.Consumer>{(store) => {
                 console.log(store);
                 return (
@@ -35,7 +39,10 @@ const Search = (props: ISearch) => {
             }
             }
             </MyContext.Consumer> */}
+            <Suspense fallback={Loading}>
             {<Grid gifs={val}/>}
+            </Suspense>
+            
         </div>
     )
 }
