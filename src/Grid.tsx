@@ -11,10 +11,7 @@ const Grid = (props: IGrid) => {
     return(
         <div className='grid-container'
       style={{
-        display: 'grid',
-        // columns: "5 auto",
-        // columnGap: "20px",
-        
+        display: 'grid',        
     }}
     >
     {props.gifs.map(item=> { console.log(item);

@@ -6,8 +6,8 @@ interface ISearchBox extends ISearch {
 }
 const SearchBox = (props: ISearchBox) => {
     return (<div id='searchbox'>
-        <input id='inp' placeholder='search gifs' onChange={(e) => {console.log('nabral'); props.searchHandler(e.target.value)}}></input>
-        <button onClick={(e) => props.getGif((document.getElementById('inp') as HTMLInputElement).value)}>Search</button>
+        <input id='inp' className='searchfield' placeholder='search gifs' onChange={(e) => {console.log('nabral'); props.searchHandler(e.target.value)}}></input>
+        <button className='submitbtn' onClick={(e) => props.getGif((document.getElementById('inp') as HTMLInputElement).value)}>Search</button>
             <input type='radio' id='cgif' name='type'value='gif' defaultChecked></input>
             <label>gif</label>
             <input type='radio' id='cstick' name='type' value='sticker'></input>

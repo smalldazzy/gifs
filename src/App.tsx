@@ -8,9 +8,10 @@ import About from './About';
 import fetchData from './api';
 
 
-export const MyContext=React.createContext(null);
-export const SecContext=React.createContext(null);
-export const ThirdContext=React.createContext(null);
+export const MyContext = React.createContext(null);
+export const SecContext = React.createContext(null);
+export const ThirdContext = React.createContext(null);
+export const FourthContext = React.createContext(null);
 interface IState {
   store: Array<any>,
   offset: number,
@@ -38,28 +39,35 @@ class App extends React.Component<IProps,IState> {
   //   console.log(this.state.store);
 
   // }
-   getData = async (query) => {
-     let inp = document.getElementById('cgif') as HTMLInputElement;
-     console.log(inp.checked);
-     let type='gifs';
-     if (!inp.checked) {type='stickers'}
+  getType(){
+    let inp = document.getElementById('cgif') as HTMLInputElement;
+     if (inp.checked) return 'gifs'
+     else return 'stickers';
+  }
+    getData = async (query) => {
+      let type=this.getType();
+    //  let inp = document.getElementById('cgif') as HTMLInputElement;
+    //  console.log(inp.checked);
+    //  let type='gifs';
+    //  if (!inp.checked) {type='stickers'}
     //  e.preventDefault();
     const data = await fetchData(query,type, this.state.offset);
     // this.setState({store:[]});
     console.log('zapisivau');
     console.log(this.state);
     data.data.map(element => {
-        this.state.store.push({ id: element.id, url: element.images.original.url, saved:false })
+        this.state.store.push({ id: element.id, url: element.images.original.webp, saved:false })
     })
-    this.forceUpdate(); //иначе нет сетки с выдачей, хотя данные в компонентах есть
+    this.forceUpdate(); //иначе еще раз на вкладку search, т.к нет сетки с выдачей, хотя данные в компонентах есть (???)
     
   }
   loadMore() {
     this.setState( prev => ({offset: prev.offset + 5}));
-    let inp = document.getElementById('cgif') as HTMLInputElement;
-     console.log(inp.checked);
-     let type='gifs';
-     if (!inp.checked) {type='stickers'}
+    // let inp = document.getElementById('cgif') as HTMLInputElement;
+    //  console.log(inp.checked);
+    //  let type='gifs';
+    //  if (!inp.checked) {type='stickers'}
+     let type = this.getType();
     this.getData(this.state.query);
   }
   handleScroll=(e)=>{
@@ -70,12 +78,11 @@ class App extends React.Component<IProps,IState> {
     const pageOffset = window.pageYOffset + window.innerHeight;
     const bottomOffset = 20;
     if (pageOffset > lastLiOffset - bottomOffset) this.loadMore();
-
-
   }
-  saveItem(id: string){
+  saveItem = (id: string) => {
+    let type = this.getType();
     let saved=JSON.parse((localStorage.getItem("GIFS")! || "[]"));
-    saved.push({id: id, type: 'gifs '});
+    saved.push({id: id, type: type});
     localStorage.setItem("GIFS", JSON.stringify(saved));
   }
   componentDidUpdate(){
@@ -99,12 +106,13 @@ class App extends React.Component<IProps,IState> {
           <Nav/>
           <SecContext.Provider value={this.getData}>
             <ThirdContext.Provider value={this.searchim}>
-              <Route path='/search' component={Search} /*render={()=>(<Search getGif={this.getData}/>)}*/ />
+              <FourthContext.Provider value={this.saveItem}>
+                <Route path='/search' component={Search} /*render={()=>(<Search getGif={this.getData}/>)}*/ />
+              </FourthContext.Provider>
             </ThirdContext.Provider>
           </SecContext.Provider>
           <Route path='/saved' component={Saved}/>
           <Route path='/about' component={About}/>
-          <a onClick={()=>this.loadMore()}>Load more</a>
         </div>
         </MyContext.Provider>
       </Router>

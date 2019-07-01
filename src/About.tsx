@@ -12,7 +12,7 @@ const About = () => {
     return(
     <div>
     <h1>This service provides opportunity to find gifs and stickers</h1>
-    <GifItem id='dasads' url='https://media2.giphy.com/media/cLcxtL1z8t8oo/giphy.gif?cid=043a88795d1645207638794d45e54297&rid=giphy.gif'/>
+    {/* <GifItem id='dasads' url='https://media2.giphy.com/media/cLcxtL1z8t8oo/giphy.gif?cid=043a88795d1645207638794d45e54297&rid=giphy.gif'/> */}
     </div>
     )
 }

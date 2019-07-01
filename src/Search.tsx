@@ -21,7 +21,7 @@ const Search = (props: ISearch) => {
     // console.log(state);
     // console.log('sd');
     let val = useContext(MyContext);
-    let getGif = useContext(SecContext);
+    let getGif = useContext(SecContext); //будет ли лучше эти переменные объявить вне Search, а потом прописать интерфейс и добавить их в пропсы?
     let qur = useContext(ThirdContext);
     console.log(val);
     return (
@@ -39,8 +39,8 @@ const Search = (props: ISearch) => {
             }
             }
             </MyContext.Consumer> */}
-            <Suspense fallback={Loading}>
-            {<Grid gifs={val}/>}
+            <Suspense fallback={<Loading/>}>
+                <Grid gifs={val}/>
             </Suspense>
             
         </div>
