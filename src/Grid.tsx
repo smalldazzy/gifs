@@ -9,7 +9,6 @@ interface IGrid {
 const Grid = (props: IGrid) => {
   const GifItem = React.lazy(() => import('./GifItem'));
   let saveHandler = useContext(FourthContext);
-  console.log(props.saved);
   return (
     <div className='grid-container'
       style={{

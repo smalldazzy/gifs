@@ -5,13 +5,14 @@ import Nav from './Nav';
 // import Search from './Search';
 // import Saved from './Saved';
 // import About from './About';
-import {fetchData} from './api';
+import { fetchData } from './api';
 
 
 export const MyContext = React.createContext(null);
 export const SecContext = React.createContext(null);
 export const ThirdContext = React.createContext(null);
 export const FourthContext = React.createContext(null);
+export const FifthContext = React.createContext(null);
 interface IState {
   store: Array<any>,
   offset: number,
@@ -34,6 +35,9 @@ class App extends React.Component<IProps, IState> {
       scrolling: false
     }
     this.searchim = this.searchim.bind(this);
+    this.loadMore = this.loadMore.bind(this);
+    this.getData = this.getData.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   getType() {
@@ -41,29 +45,32 @@ class App extends React.Component<IProps, IState> {
     if (inp.checked) return 'gifs'
     else return 'stickers';
   }
+
   getData = async (query: string) => {
     let type = this.getType();
     const data = await fetchData(query, type, this.state.offset);
-    console.log('State changing');
     data.data.forEach(element => {
       this.setState(prev => {
         return ({
-        store: [...prev.store, {
-          id: element.id, 
-          url: element.images.original.webp, 
-          saved: false
-        }]
-      });
+          store: [...prev.store, {
+            id: element.id,
+            url: element.images.original.webp,
+            saved: false
+          }]
+        });
       });
     });
-    
+
     this.setState({ scrolling: false });
   }
+
   loadMore() {
-    this.setState(prev => ({ offset: prev.offset + 9, scrolling: true }));
+    this.setState(prev => ({ offset: prev.offset + 9, scrolling: true })); //9--offset
     this.getData(this.state.query);
+
   }
-  handleScroll = (e) => {
+
+  handleScroll = () => {
     const { scrolling } = this.state;
     if (scrolling) return;
     const lastLi = document.querySelector('div.grid-container > div:last-child') as HTMLElement;
@@ -72,40 +79,37 @@ class App extends React.Component<IProps, IState> {
     const bottomOffset = 20;
     if (pageOffset > lastLiOffset - bottomOffset) this.loadMore();
   }
+
   saveItem = (id: string) => {
-    let type = this.getType();
     let saved = JSON.parse((localStorage.getItem("GIFS")! || "[]"));
-    let saveurl = this.state.store.find(element => element.id===id);
-    console.log(saveurl.url);
+    let saveurl = this.state.store.find(element => element.id === id);
     saved.push({ id: id, url: saveurl.url });
     localStorage.setItem("GIFS", JSON.stringify(saved));
     console.log('saved');
   }
-  componentWillMount() {
-    window.addEventListener('scroll', (e) => {
-      this.handleScroll(e);
-    });
-  }
+
   searchim(query: string) {
     this.setState({ query: query, store: [] });
   }
+
   render() {
-    console.log('rendering');
     return (
       <Router>
-        <MyContext.Provider value={this.state.store}>
+        <MyContext.Provider value={this.state}>
           <div className="App">
             <Nav />
             <Suspense fallback={<div>Loading...</div>}>
-            <SecContext.Provider value={this.getData}>
-              <ThirdContext.Provider value={this.searchim}>
-                <FourthContext.Provider value={this.saveItem}>
-                  <Route path='/search' component={Search} /*render={()=>(<Search getGif={this.getData}/>)}*/ />
-                </FourthContext.Provider>
-              </ThirdContext.Provider>
-            </SecContext.Provider>
-            <Route path='/saved' component={Saved} />
-            <Route path='/about' component={About} />
+              <SecContext.Provider value={this.getData}>
+                <ThirdContext.Provider value={this.searchim}>
+                  <FourthContext.Provider value={this.saveItem}>
+                    <FifthContext.Provider value={this.handleScroll}>
+                      <Route path='/search' component={Search} /*render={()=>(<Search getGif={this.getData}/>)}*/ />
+                    </FifthContext.Provider>
+                  </FourthContext.Provider>
+                </ThirdContext.Provider>
+              </SecContext.Provider>
+              <Route path='/saved' component={Saved} />
+              <Route path='/about' component={About} />
             </Suspense>
           </div>
         </MyContext.Provider>
